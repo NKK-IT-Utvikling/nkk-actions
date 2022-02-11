@@ -45,13 +45,3 @@ jobs:
         git config --local user.name "GitHub Action"
         git commit -m "New SNAPSHOT version" -a
         git push origin master
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1.0.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ inputs.version }}
-        release_name: Release ${{ inputs.version }}
-        draft: false
-        prerelease: false
