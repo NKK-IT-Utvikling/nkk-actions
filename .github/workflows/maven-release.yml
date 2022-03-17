@@ -4,8 +4,11 @@ on:
   workflow_call:
     inputs:
       version:
-        required: true
         type: string
+        required: true
+      goals:
+        type: string
+        default: 'clean package'
 jobs:
   build:
 
@@ -36,7 +39,7 @@ jobs:
     - name: Maven release
       run: |
         mvn --batch-mode versions:set -DnewVersion=${{ inputs.version }} -DprocessAllModules -DgenerateBackupPoms=false
-        mvn clean package
+        mvn ${{ inputs.goals }}
         mvn --batch-mode build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT -DprocessAllModules -DgenerateBackupPoms=false
     - name: Commit and push files
       run: |
