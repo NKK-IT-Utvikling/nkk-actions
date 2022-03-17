@@ -9,6 +9,10 @@ on:
       goals:
         type: string
         default: 'clean package'
+    secrets:
+      PACKAGES_TOKEN:
+        required: true
+        
 jobs:
   build:
 
@@ -27,6 +31,8 @@ jobs:
                 <servers>
                   <server><id>github</id><username>x-access-token</username><password>${{ secrets.GITHUB_TOKEN }}</password></server>
                   <server><id>github-nkk-tng</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
+                  <server><id>github-nkk-okonomi</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
+                  <server><id>github-nkk-dyreidentitet</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
                 </servers>
               </settings>" > ~/.m2/settings.xml
     - name: Cache maven dependencies
