@@ -15,16 +15,19 @@ on:
       context:
         required: true
         type: string
+      jdk:
+        type: number
+        default: 11
 
 jobs:
   deploy:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v1
-      - name: Set up JDK 11
+      - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          java-version: 11
+          java-version: ${{ inputs.jdk }}
           distribution: 'adopt'
           overwrite-settings: false
       - name: Build with Maven
