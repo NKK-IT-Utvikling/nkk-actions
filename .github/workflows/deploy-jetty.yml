@@ -18,6 +18,9 @@ on:
       jdk:
         type: number
         default: 11
+      goals:
+        type: string
+        default: 'clean package'
 
 jobs:
   deploy:
@@ -31,6 +34,6 @@ jobs:
           distribution: 'adopt'
           overwrite-settings: false
       - name: Build with Maven
-        run: mvn -B -P ${{ inputs.instance }} clean package
+        run: mvn -B -P ${{ inputs.instance }} -Dmaven.test.skip ${{ inputs.goals }}
       - name: Deploy to server
         run: ~/deploy ${{ inputs.file }} ${{ inputs.server }} ${{ inputs.instance }} ${{ inputs.context }}.war
