@@ -8,7 +8,7 @@ on:
         required: true
       branch:
         type: string
-        default: master
+        default: 'master'
       goals:
         type: string
         default: 'clean package'
