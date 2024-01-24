@@ -29,6 +29,8 @@ jobs:
     - name: Set up JDK
       uses: actions/setup-java@v4
       with:
+        distribution: 'adopt'
+        overwrite-settings: false
         java-version: ${{ inputs.jdk }}
     - name: Configure Maven
       run: |
