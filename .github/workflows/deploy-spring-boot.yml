@@ -1,0 +1,85 @@
+name: Deploy spring boot
+
+on:
+  workflow_call:
+    inputs:
+      securitygroup:
+        required: true
+        type: string
+      file:
+        required: true
+        type: string
+      server:
+        required: true
+        type: string
+      context:
+        required: true
+        type: string
+      jdk:
+        type: number
+        default: 11
+      goals:
+        type: string
+        default: 'clean package'
+      owner:
+        type: string
+        default: 'jetty:jetty'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ inputs.jdk }}
+          distribution: 'adopt'
+          overwrite-settings: false
+      - name: Configure Maven
+        run: |
+          mkdir -p ~/.m2
+          echo "<settings>
+                  <servers>
+                    <server><id>github</id><username>x-access-token</username><password>${{ secrets.GITHUB_TOKEN }}</password></server>
+                    <server><id>github-nkk-tng</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
+                    <server><id>github-nkk-prove</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
+                    <server><id>github-nkk-helse</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
+                    <server><id>github-nkk-dommer</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
+                    <server><id>github-nkk-okonomi</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
+                    <server><id>github-nkk-dyreidentitet</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
+                  </servers>
+                </settings>" > ~/.m2/settings.xml
+      - name: Build with Maven
+        run: mvn -B -Dmaven.test.skip ${{ inputs.goals }}
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.ACTIONS_AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.ACTIONS_AWS_ACCESS_SECRET }}
+          aws-region: eu-north-1
+      - name: Get runner IP address
+        id: ip
+        uses: haythem/public-ip@v1.2
+      - name: Whitelist runner IP address
+        run: |
+          aws ec2 authorize-security-group-ingress \
+            --group-id ${{ inputs.securitygroup }} \
+            --protocol tcp \
+            --port 22 \
+            --cidr ${{ steps.ip.outputs.ipv4 }}/32
+
+      - name: Deploy to server
+        run: | 
+          echo "${{ secrets.ACTIONS_SSH_PRIVATE_KEY }}" > private_key && chmod 600 private_key
+          scp -o StrictHostKeyChecking=no -i private_key ${{ inputs.file }} actions@${{ inputs.server }}:work/${{ inputs.context }}.jar || exit 1
+          ssh -o StrictHostKeyChecking=no -i private_key actions@${{ inputs.server }} "~/deploy-spring-boot work/${{ inputs.context }}.jar ${{ inputs.owner }}" || exit 1
+
+      - name: Revoke runner IP address
+        run: |
+          aws ec2 revoke-security-group-ingress \
+            --group-id ${{ inputs.securitygroup }} \
+            --protocol tcp \
+            --port 22 \
+            --cidr ${{ steps.ip.outputs.ipv4 }}/32
