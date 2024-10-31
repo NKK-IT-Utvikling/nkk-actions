@@ -1,4 +1,4 @@
-name: Deploy to jetty
+name: Deploy to jetty ec2
 
 on:
   workflow_call:
