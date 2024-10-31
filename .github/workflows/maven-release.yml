@@ -14,7 +14,7 @@ on:
         default: 'clean package'
       jdk:
         type: number
-        default: 11
+        default: 17
     secrets:
       PACKAGES_TOKEN:
         required: true

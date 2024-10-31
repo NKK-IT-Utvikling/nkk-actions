@@ -5,7 +5,7 @@ on:
     inputs:
       jdk:
         type: number
-        default: 11
+        default: 17
       goals:
         type: string
         default: 'clean package'
