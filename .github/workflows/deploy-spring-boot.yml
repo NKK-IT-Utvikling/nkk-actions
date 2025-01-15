@@ -43,11 +43,16 @@ jobs:
                   <servers>
                     <server><id>github</id><username>x-access-token</username><password>${{ secrets.GITHUB_TOKEN }}</password></server>
                     <server><id>github-nkk-tng</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
+                    <server><id>github-nkk-ecvo</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
                     <server><id>github-nkk-prove</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
                     <server><id>github-nkk-helse</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
                     <server><id>github-nkk-dommer</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
+                    <server><id>github-nkk-intouch</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
                     <server><id>github-nkk-okonomi</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
+                    <server><id>github-nkk-utstilling</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
                     <server><id>github-nkk-dyreidentitet</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
+                    <server><id>github-origin-legacy</id><username>x-access-token</username><password>${{ secrets.ORIGIN_PACKAGES_TOKEN }}</password></server>
+                    <server><id>github-origin-gt-legacy</id><username>x-access-token</username><password>${{ secrets.ORIGIN_PACKAGES_TOKEN }}</password></server>
                   </servers>
                 </settings>" > ~/.m2/settings.xml
       - name: Build with Maven
