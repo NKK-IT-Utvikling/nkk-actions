@@ -58,10 +58,3 @@ jobs:
         mvn --batch-mode versions:set -DnewVersion=${{ inputs.version }} -DprocessAllModules -DgenerateBackupPoms=false
         mvn ${{ inputs.goals }}
         mvn --batch-mode build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT -DprocessAllModules -DgenerateBackupPoms=false
-    - name: Commit and push files
-      run: |
-        git switch -c ${{ inputs.branch }}
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git commit -m "New SNAPSHOT version" -a
-        git push origin ${{ inputs.branch }}
