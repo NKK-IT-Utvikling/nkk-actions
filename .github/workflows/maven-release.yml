@@ -58,3 +58,18 @@ jobs:
         mvn --batch-mode versions:set -DnewVersion=${{ inputs.version }} -DprocessAllModules -DgenerateBackupPoms=false
         mvn ${{ inputs.goals }}
         mvn --batch-mode build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT -DprocessAllModules -DgenerateBackupPoms=false
+    - name: Create release with release notes
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ github.ref_name }}
+      run: |
+        gh release create "$tag" \
+            --repo="$GITHUB_REPOSITORY" \
+            --title="${tag#v}" \
+            --generate-notes
+    - name: Only keep latest 25 releases
+      uses: dev-drprasad/delete-older-releases@v0.3.4
+      with:
+        keep_latest: 25
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
