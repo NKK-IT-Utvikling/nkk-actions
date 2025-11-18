@@ -66,7 +66,7 @@ jobs:
           aws-region: eu-north-1
       - name: Get runner IP address
         id: ip
-        uses: haythem/public-ip@v1.2
+        uses: haythem/public-ip@v1
       - name: Whitelist runner IP address
         run: |
           aws ec2 authorize-security-group-ingress \
