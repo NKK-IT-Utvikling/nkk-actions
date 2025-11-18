@@ -19,11 +19,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Set up JDK
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v5
       with:
-        distribution: 'adopt'
+        distribution: 'corretto'
         overwrite-settings: false
         java-version: ${{ inputs.jdk }}
     - name: Configure Maven
@@ -46,7 +46,7 @@ jobs:
                 </servers>
               </settings>" > ~/.m2/settings.xml
     - name: Cache maven dependencies
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.m2/repository
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
