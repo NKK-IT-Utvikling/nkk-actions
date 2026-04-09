@@ -29,7 +29,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Set up JDK
         uses: actions/setup-java@v5
         with:
@@ -60,14 +60,15 @@ jobs:
         run: mvn -B -Dmaven.test.skip ${{ inputs.goals }}
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           aws-access-key-id: ${{ secrets.ACTIONS_AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.ACTIONS_AWS_ACCESS_SECRET }}
           aws-region: eu-north-1
-      - name: Get runner IP address
+      - name: Get runner ip address
         id: ip
-        uses: haythem/public-ip@v1.2
+        shell: bash
+        run: echo "ipv4=$(curl -4 -s https://checkip.amazonaws.com)" >> $GITHUB_OUTPUT
       - name: Whitelist runner IP address
         run: |
           aws ec2 authorize-security-group-ingress \
