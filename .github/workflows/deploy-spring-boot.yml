@@ -25,6 +25,10 @@ on:
         type: string
         default: 'jetty:jetty'
 
+permissions:
+  contents: read
+  packages: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
