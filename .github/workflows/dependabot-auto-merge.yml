@@ -11,13 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     if: github.actor == 'dependabot[bot]'
     steps:
-      - uses: dependabot/fetch-metadata@v2
+      - uses: dependabot/fetch-metadata@v3
         id: meta
 
       - name: Auto-merge eligible updates
         if: >-
           steps.meta.outputs.update-type == 'version-update:semver-patch' ||
-          steps.meta.outputs.package-ecosystem == 'github-actions' ||
+          steps.meta.outputs.package-ecosystem == 'github_actions' ||
           contains(steps.meta.outputs.dependency-names, 'no.nkk')
         run: gh pr merge --auto --squash "$PR_URL"
         env:
