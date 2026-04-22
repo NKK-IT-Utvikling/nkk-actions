@@ -18,7 +18,8 @@ jobs:
         if: >-
           steps.meta.outputs.update-type == 'version-update:semver-patch' ||
           steps.meta.outputs.package-ecosystem == 'github_actions' ||
-          contains(steps.meta.outputs.dependency-names, 'no.nkk')
+          contains(steps.meta.outputs.dependency-names, 'no.nkk') ||
+          steps.meta.outputs.dependency-group != ''
         run: gh pr review --approve "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
@@ -28,7 +29,8 @@ jobs:
         if: >-
           steps.meta.outputs.update-type == 'version-update:semver-patch' ||
           steps.meta.outputs.package-ecosystem == 'github_actions' ||
-          contains(steps.meta.outputs.dependency-names, 'no.nkk')
+          contains(steps.meta.outputs.dependency-names, 'no.nkk') ||
+          steps.meta.outputs.dependency-group != ''
         run: gh pr merge --auto --squash "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
