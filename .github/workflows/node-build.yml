@@ -1,0 +1,53 @@
+name: Node.js Build
+
+on:
+  workflow_call:
+    inputs:
+      node_version:
+        type: string
+        required: true
+      working_directory:
+        type: string
+        default: '.'
+      gen_api:
+        type: boolean
+        default: false
+      npm_ci_flags:
+        type: string
+        default: ''
+      ci_false:
+        type: boolean
+        default: false
+    secrets:
+      PACKAGES_TOKEN:
+        required: true
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  build-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ inputs.node_version }}
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@NKK-IT-Utvikling'
+      - name: Install dependencies
+        run: npm ci ${{ inputs.npm_ci_flags }}
+        working-directory: ${{ inputs.working_directory }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+          CI: ${{ inputs.ci_false && 'false' || 'true' }}
+      - name: Generate API client
+        if: inputs.gen_api
+        run: npm run gen-api
+        working-directory: ${{ inputs.working_directory }}
+      - name: Build
+        run: npm run build
+        working-directory: ${{ inputs.working_directory }}
+        env:
+          CI: ${{ inputs.ci_false && 'false' || 'true' }}

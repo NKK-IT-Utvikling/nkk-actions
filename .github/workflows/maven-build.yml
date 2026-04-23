@@ -9,9 +9,14 @@ on:
       goals:
         type: string
         default: 'clean package'
+      axon_license:
+        type: boolean
+        default: false
     secrets:
       PACKAGES_TOKEN:
         required: true
+      AXON_DPM_LICENSE:
+        required: false
 
 permissions:
   contents: read
@@ -48,6 +53,7 @@ jobs:
                   <server><id>github-dyreidentitet-webservice-client</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
                   <server><id>github-nkk-dyreidentitet-service</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
                   <server><id>github-nkk-apache-tiles</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
+                  <server><id>github-nkk-v2</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
                   <server><id>github-origin-legacy</id><username>x-access-token</username><password>${{ secrets.ORIGIN_PACKAGES_TOKEN }}</password></server>
                   <server><id>github-origin-gt-legacy</id><username>x-access-token</username><password>${{ secrets.ORIGIN_PACKAGES_TOKEN }}</password></server>
                 </servers>
@@ -57,5 +63,10 @@ jobs:
       with:
         path: ~/.m2/repository
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+    - name: Retrieve Axon license
+      if: inputs.axon_license
+      env:
+        AXON_DPM_LICENSE: ${{ secrets.AXON_DPM_LICENSE }}
+      run: echo $AXON_DPM_LICENSE | base64 -d > src/test/resources/axoniq.license
     - name: Build with Maven
       run: mvn -B ${{ inputs.goals }} --file pom.xml
