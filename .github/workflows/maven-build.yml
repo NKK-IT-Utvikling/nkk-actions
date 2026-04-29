@@ -54,6 +54,7 @@ jobs:
                   <server><id>github-nkk-dyreidentitet-service</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
                   <server><id>github-nkk-apache-tiles</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
                   <server><id>github-nkk-v2</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
+                  <server><id>github-nkk-jsreport</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
                   <server><id>github-origin-legacy</id><username>x-access-token</username><password>${{ secrets.ORIGIN_PACKAGES_TOKEN }}</password></server>
                   <server><id>github-origin-gt-legacy</id><username>x-access-token</username><password>${{ secrets.ORIGIN_PACKAGES_TOKEN }}</password></server>
                 </servers>
