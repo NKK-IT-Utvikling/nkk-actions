@@ -42,6 +42,11 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
           CI: ${{ inputs.ci_false && 'false' || 'true' }}
+      - name: Check peer dependencies
+        run: npm ls
+        working-directory: ${{ inputs.working_directory }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
       - name: Generate API client
         if: inputs.gen_api
         run: npm run gen-api
