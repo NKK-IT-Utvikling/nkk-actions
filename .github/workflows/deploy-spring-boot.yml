@@ -61,7 +61,7 @@ jobs:
                   </servers>
                 </settings>" > ~/.m2/settings.xml
       - name: Build with Maven
-        run: mvn -B -Dmaven.test.skip ${{ inputs.goals }}
+        run: mvn -B -DskipTests ${{ inputs.goals }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6
