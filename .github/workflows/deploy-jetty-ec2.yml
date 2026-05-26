@@ -47,6 +47,7 @@ jobs:
                   <servers>
                     <server><id>github</id><username>x-access-token</username><password>${{ secrets.GITHUB_TOKEN }}</password></server>
                     <server><id>github-nkk-tng</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
+                    <server><id>github-nkk-system-monitoring</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
                     <server><id>github-nkk-ecvo</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
                     <server><id>github-nkk-prove</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
                     <server><id>github-nkk-helse</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
