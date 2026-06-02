@@ -22,7 +22,8 @@ jobs:
           steps.meta.outputs.update-type == 'version-update:semver-patch' ||
           steps.meta.outputs.package-ecosystem == 'github_actions' ||
           contains(steps.meta.outputs.dependency-names, 'no.nkk') ||
-          steps.meta.outputs.dependency-group != ''
+          steps.meta.outputs.dependency-group != '' ||
+          steps.meta.outputs.update-type == 'version-update:semver-minor'
         run: gh pr review --approve "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
@@ -33,7 +34,8 @@ jobs:
           steps.meta.outputs.update-type == 'version-update:semver-patch' ||
           steps.meta.outputs.package-ecosystem == 'github_actions' ||
           contains(steps.meta.outputs.dependency-names, 'no.nkk') ||
-          steps.meta.outputs.dependency-group != ''
+          steps.meta.outputs.dependency-group != '' ||
+          steps.meta.outputs.update-type == 'version-update:semver-minor'
         run: gh pr checks "$PR_URL" --required --watch --fail-fast
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
@@ -44,7 +46,8 @@ jobs:
           steps.meta.outputs.update-type == 'version-update:semver-patch' ||
           steps.meta.outputs.package-ecosystem == 'github_actions' ||
           contains(steps.meta.outputs.dependency-names, 'no.nkk') ||
-          steps.meta.outputs.dependency-group != ''
+          steps.meta.outputs.dependency-group != '' ||
+          steps.meta.outputs.update-type == 'version-update:semver-minor'
         run: gh pr merge --squash "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
