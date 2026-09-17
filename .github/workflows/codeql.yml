@@ -2,6 +2,17 @@ name: CodeQL Analysis
 
 on:
   workflow_call:
+    inputs:
+      disable_kotlin:
+        description: >-
+          Hopp over Kotlin-ekstraksjon. CodeQL sin Java/Kotlin-ekstraktor henger
+          etter Kotlin-utgivelsene, og en for ny Kotlin gjor at hele analysen
+          feiler (KotlinVersionTooRecentError) - da blir heller ikke Java skannet.
+          Sett denne til true i repo som bruker en Kotlin-versjon CodeQL enna ikke
+          stotter, sa beholder vi i det minste Java-dekningen. Fjern den igjen nar
+          CodeQL har tatt igjen.
+        type: boolean
+        default: false
     secrets:
       PACKAGES_TOKEN:
         required: true
@@ -47,6 +58,10 @@ jobs:
                     <server><id>github-origin-gt-legacy</id><username>x-access-token</username><password>${{ secrets.ORIGIN_PACKAGES_TOKEN }}</password></server>
                   </servers>
                 </settings>" > ~/.m2/settings.xml
+
+      - name: Disable Kotlin extraction
+        if: inputs.disable_kotlin
+        run: echo "CODEQL_EXTRACTOR_JAVA_AGENT_DISABLE_KOTLIN=true" >> "$GITHUB_ENV"
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4.37.9
