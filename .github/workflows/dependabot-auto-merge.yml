@@ -12,7 +12,7 @@ permissions:
 jobs:
   auto-merge:
     runs-on: ubuntu-latest
-    if: github.actor == 'dependabot[bot]'
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
     steps:
       - uses: dependabot/fetch-metadata@v3
         id: meta
@@ -24,7 +24,17 @@ jobs:
           contains(steps.meta.outputs.dependency-names, 'no.nkk') ||
           steps.meta.outputs.dependency-group != '' ||
           steps.meta.outputs.update-type == 'version-update:semver-minor'
-        run: gh pr review --approve "$PR_URL"
+        run: |
+          # A human fix on a Dependabot branch must get a human review: the
+          # ruleset dismisses stale approvals on push, and re-approving here
+          # would silently undo that.
+          authors=$(gh pr view "$PR_URL" --json commits \
+                     --jq '[.commits[].authors[].login] | unique | join(",")')
+          if [ "$authors" != "dependabot[bot]" ]; then
+            echo "PR-en har non-Dependabot commits ($authors) - overlater godkjenning til et menneske."
+            exit 0
+          fi
+          gh pr review --approve "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
