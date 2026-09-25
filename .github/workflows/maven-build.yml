@@ -49,6 +49,7 @@ jobs:
                   <server><id>github-nkk-intouch</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
                   <server><id>github-nkk-okonomi</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
                   <server><id>github-nkk-utstilling</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
+                  <server><id>github-nkk-utstilling-core</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
                   <server><id>github-nkk-dyreidentitet</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
                   <server><id>github-dyreidentitet-webservice-client</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
                   <server><id>github-nkk-dyreidentitet-service</id><username>x-access-token</username><password>${{ secrets.PACKAGES_TOKEN }}</password></server>
