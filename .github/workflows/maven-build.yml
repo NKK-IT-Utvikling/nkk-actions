@@ -35,6 +35,9 @@ jobs:
         distribution: 'corretto'
         overwrite-settings: false
         java-version: ${{ inputs.jdk }}
+        # Same cache as codeql.yml, which saves it on the default branch: a PR (or a tag) can only restore caches from its
+        # own ref and the default branch, so a cache only this workflow saved was never found on a PR's first run.
+        cache: maven
     - name: Configure Maven
       run: |
         mkdir -p ~/.m2
@@ -60,13 +63,6 @@ jobs:
                   <server><id>github-origin-gt-legacy</id><username>x-access-token</username><password>${{ secrets.ORIGIN_PACKAGES_TOKEN }}</password></server>
                 </servers>
               </settings>" > ~/.m2/settings.xml
-    - name: Cache maven dependencies
-      uses: actions/cache@v5
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
     - name: Retrieve Axon license
       if: inputs.axon_license
       env:
