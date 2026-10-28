@@ -28,6 +28,7 @@ on:
 permissions:
   contents: read
   packages: read
+  id-token: write
 
 jobs:
   deploy:
@@ -64,11 +65,11 @@ jobs:
       - name: Build with Maven
         run: mvn -B -DskipTests ${{ inputs.goals }}
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v6
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
         with:
-          aws-access-key-id: ${{ secrets.ACTIONS_AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.ACTIONS_AWS_ACCESS_SECRET }}
+          role-to-assume: arn:aws:iam::835337142747:role/github-deploy
+          role-session-name: ${{ github.event.repository.name || 'github-actions' }}
           aws-region: eu-north-1
       - name: Get runner ip address
         id: ip
@@ -89,7 +90,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i private_key actions@${{ inputs.server }} "~/deploy-spring-boot work/${{ inputs.context }}.jar ${{ inputs.owner }}" || exit 1
 
       - name: Revoke runner IP address
-        if: always()
+        if: always() && steps.ip.outputs.ipv4 != ''
         run: |
           aws ec2 revoke-security-group-ingress \
             --group-id ${{ inputs.securitygroup }} \
