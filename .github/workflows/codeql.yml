@@ -40,7 +40,9 @@ jobs:
         with:
           distribution: corretto
           java-version: ${{ inputs.jdk }}
-          cache: maven
+          # Uten pom.xml (repo uten Java-kode ennå) feiler setup-java på cache: maven,
+          # og da blir heller ikke Actions skannet.
+          cache: ${{ hashFiles('**/pom.xml') != '' && 'maven' || '' }}
           overwrite-settings: false
 
       - name: Configure Maven
