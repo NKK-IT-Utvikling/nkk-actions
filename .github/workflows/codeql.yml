@@ -74,7 +74,7 @@ jobs:
         run: echo "CODEQL_EXTRACTOR_JAVA_AGENT_DISABLE_KOTLIN=true" >> "$GITHUB_ENV"
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v4.38.2
+        uses: github/codeql-action/init@v4.39.1
         with:
           queries: security-extended
           # Autobuild kjører før JS/Python-ekstraksjonen og kopierer webapp-filer
@@ -85,7 +85,7 @@ jobs:
               - '**/target/**'
 
       - name: Autobuild
-        uses: github/codeql-action/autobuild@v4.38.2
+        uses: github/codeql-action/autobuild@v4.39.1
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v4.38.2
+        uses: github/codeql-action/analyze@v4.39.1
